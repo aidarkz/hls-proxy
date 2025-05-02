@@ -1,7 +1,12 @@
-FROM nginx:stable
+FROM python:3.10-slim
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY default.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-RUN mkdir -p /var/cache/nginx/hls_cache \
-    && chown -R nginx:nginx /var/cache/nginx
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["python", "main.py"]
